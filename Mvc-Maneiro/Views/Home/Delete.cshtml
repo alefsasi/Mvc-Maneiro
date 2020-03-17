@@ -1,0 +1,36 @@
+﻿@model Mvc_Maneiro.Models.Aluno
+@{
+    Layout = null;
+    ViewBag.Title = "Delete";
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title text-warning">Excluir Registro</h4>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        </div>
+
+        <div class="modal-body">
+            <h5>Tem certeza que deseja excluir o Registro?</h5>
+            <br />
+            <p>@Html.DisplayNameFor(model => model.Nome) : @Html.DisplayFor(model => model.Nome)</p>
+            <p>@Html.DisplayNameFor(model => model.Email) : @Html.DisplayFor(model => model.Email)</p>
+            <p>@Html.DisplayNameFor(model => model.Curso) : @Html.DisplayFor(model => model.Curso)</p>
+            <p>@Html.DisplayNameFor(model => model.Sexo) : @Html.DisplayFor(model => model.Sexo)</p>
+        </div>
+        <div class="modal-footer">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <button type="submit" class="btn btn-primary"> Excluir</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            }
+
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

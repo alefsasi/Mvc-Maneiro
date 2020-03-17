@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Mvc_Maneiro.Models.Aluno>
+
+@{
+    ViewBag.Title = "Index";
+    var erroMensagem = @ViewBag.ErroMensagem ?? "";
+}
+
+
+<h2>Listar Alunos</h2>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        @Html.ActionLink("Novo Aluno", "Create", null, new { @class = "btn btn-outline-primary" })
+    </div>
+</div>
+<div>
+    <table class="table table-striped" id="alunos">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Curso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sexo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Curso)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sexo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
+                        <button type="button" class="detalhes btn btn-warning" data-id="@item.Id">Detalhes</button>
+                        <button type="button" class="excluir btn btn-danger" data-id="@item.Id">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="col-md-12">
+        @Html.ActionLink("Gerar PDF", "ListarAlunos", null, new { @class = "btn btn-outline-secondary float-right" })
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card" id="card-enquete">
+        <div class="card-header text-light bg-dark">
+            <h5 class="text-center card-title">Enquete</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-center">Você vai responder a essa enquete?</p>
+
+            <div class="row offset-1">
+                <input type="radio" name="opcao" class="col-2" value="1" checked /><spam>SIM</spam>
+
+                <input type="radio" name="opcao" class="col-2" value="2" /><spam>NÃO</spam>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary btn-lg btn-block" id="btnEnviarEnquete">Enviar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EXCLUIR REGISTRO! -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+
+</div>
+
+@section Scripts {
+    <script>
+
+        $(document).ready(function () {
+
+            if ("@erroMensagem") { alert('Erro ao excluir registro!'); }
+
+            $(".excluir").click(function () {
+                const idExclusao = $(this).attr("data-id");
+                $("#modal").load("/Home/Delete/" + idExclusao, function () {
+                    $("#modal").modal();
+                })
+            });
+
+            $(".detalhes").click(function () {
+                const id = $(this).attr("data-id");
+                $("#modal").load("/Home/Details/" + id, function () {
+                    $("#modal").modal();
+                })
+            });
+
+            $("#btnEnviarEnquete").click(function () {
+                var opc = $("#card-enquete input[type=radio]:checked").val();
+                $.ajax({
+                    type: "POST",
+                    url: "Home/ResponderEnquete",
+                    data: { opcao: opc }
+                }).done(function (msg) {
+                    $("#card-enquete .card-body").html("<p>" + msg + "<p>");
+                    $("#card-enquete .card-footer").hide();
+                });
+            });
+
+
+
+        });
+
+    </script>
+}
