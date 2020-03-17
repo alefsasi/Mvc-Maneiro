@@ -32,13 +32,13 @@ namespace Mvc_Maneiro.Controllers
             return View(_alunoService.GetAlunos());
         }
 
-
-        public ActionResult Buscar(string id)
+        [Route("Buscar/{descricao}")]
+        public ActionResult Buscar(string descricao)
         {
             var alunos = new List<Aluno>();
-            if (!string.IsNullOrEmpty(id))
+            if (!string.IsNullOrEmpty(descricao))
             {
-                alunos = _alunoService.GetAlunosByDescription(id);
+                alunos = _alunoService.GetAlunosByDescription(descricao);
             }
             else
             {
